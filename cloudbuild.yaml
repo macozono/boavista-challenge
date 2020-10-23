@@ -2,3 +2,5 @@ steps:
     - name: 'maven'
       entrypoint: 'mvn'
       args: ['package']
+    - name: 'docker/compose'
+      args: ['up', '-d']
