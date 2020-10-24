@@ -1,10 +1,6 @@
 # boavista-challenge
 Desafio relacionado a construção de API para manutenção de usuários
 
-## Objetivo
-
-Desenvolver uma projeto no qual consiste em disponibilizar um serviço no qual deverá realizar o processamento de uma sequência de DNA e distinguir se o resultado trata- se de DNA de humanos ou símios.
-
 ## Arquitetura e componentes envolvidos na construção
 
 O projeto foi construído utilizando o framework Spring Boot para disponibilização dos endpoints da API.
