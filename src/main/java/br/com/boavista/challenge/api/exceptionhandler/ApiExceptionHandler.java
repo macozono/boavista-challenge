@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import br.com.boavista.challenge.api.domain.exception.EntidadeNaoEncontradaException;
 import br.com.boavista.challenge.api.domain.exception.NegocioBaseException;
+import br.com.boavista.challenge.api.domain.exception.UsuarioNaoAutorizadoException;
 import br.com.boavista.challenge.api.domain.exception.UsuarioNaoConfereException;
 
 @ControllerAdvice
@@ -54,6 +55,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(UsuarioNaoConfereException.class)
 	public ResponseEntity<Object> handleUsuarioNaoConfere(UsuarioNaoConfereException ex, WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		Problema problema = new Problema();
+		
+		problema.setStatus(status.value());
+		problema.setTitulo(ex.getMessage());
+		problema.setDataHora(OffsetDateTime.now());
+		
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
+	
+	@ExceptionHandler(UsuarioNaoAutorizadoException.class)
+	public ResponseEntity<Object> handleUsuarioNaoAutorizado(UsuarioNaoAutorizadoException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		Problema problema = new Problema();
 		

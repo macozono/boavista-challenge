@@ -2,17 +2,15 @@ package br.com.boavista.challenge.api.model;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotBlank;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UsuarioUpdateInput {
+public class UsuarioOutput {
 
 	private Long id;
 	
 	private String nomeUsuario;
 	
-	@NotBlank
 	private String nome;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
@@ -20,14 +18,13 @@ public class UsuarioUpdateInput {
 	
 	private Long telefone;
 	
-	@NotBlank
-	private String senha;
-	
 	private String email;
 	
-	private EnderecoModel endereco;
+	private EnderecoModel endereco = new EnderecoModel();
 	
-	private PerfilModel perfil;
+	private PerfilModel perfil = new PerfilModel();
+	
+	private JwtModel jwt = new JwtModel();
 
 	public Long getId() {
 		return id;
@@ -35,6 +32,14 @@ public class UsuarioUpdateInput {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
 	}
 
 	public String getNome() {
@@ -61,14 +66,6 @@ public class UsuarioUpdateInput {
 		this.telefone = telefone;
 	}
 
-	public String getSenha() {
-		return senha;
-	}
-
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 	public String getEmail() {
 		return email;
 	}
@@ -92,12 +89,12 @@ public class UsuarioUpdateInput {
 	public void setPerfil(PerfilModel perfil) {
 		this.perfil = perfil;
 	}
-
-	public String getNomeUsuario() {
-		return nomeUsuario;
+	
+	public JwtModel getJwt() {
+		return jwt;
 	}
 
-	public void setNomeUsuario(String nomeUsuario) {
-		this.nomeUsuario = nomeUsuario;
+	public void setJwt(JwtModel token) {
+		this.jwt = token;
 	}
 }

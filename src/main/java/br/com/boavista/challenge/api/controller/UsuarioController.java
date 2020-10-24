@@ -23,10 +23,8 @@ import br.com.boavista.challenge.api.domain.exception.UsuarioNaoConfereException
 import br.com.boavista.challenge.api.domain.model.Usuario;
 import br.com.boavista.challenge.api.domain.model.repository.UsuarioRepository;
 import br.com.boavista.challenge.api.domain.service.UsuarioService;
-import br.com.boavista.challenge.api.model.UsuarioCreateInput;
-import br.com.boavista.challenge.api.model.UsuarioCreateOutput;
-import br.com.boavista.challenge.api.model.UsuarioUpdateInput;
-import br.com.boavista.challenge.api.model.UsuarioUpdateOutput;
+import br.com.boavista.challenge.api.model.UsuarioInput;
+import br.com.boavista.challenge.api.model.UsuarioOutput;
 import br.com.boavista.challenge.api.util.JwtTokenUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -61,15 +59,15 @@ public class UsuarioController {
 	@ApiOperation(value="Adicionar usuário", notes = "Operação para adicionar usuário na API.")
 	@PostMapping
 	@ResponseStatus
-	public ResponseEntity<UsuarioCreateOutput> adicionar(@Valid @RequestBody UsuarioCreateInput input) {
-		UsuarioCreateOutput output = service.criar(input);
+	public ResponseEntity<UsuarioOutput> adicionar(@Valid @RequestBody UsuarioInput input) {
+		UsuarioOutput output = service.criar(input);
 		return ResponseEntity.status(HttpStatus.CREATED).body(output);
 	}
 	
 	@ApiOperation(value="Atualizar usuário", notes = "Operação para atualizar informações do usuário na API. Necessário informar o token retornado na criação do usuário.")
 	@ApiImplicitParam(name="Authorization", value = "JWT Token", required = true, allowEmptyValue = false, paramType = "header", dataTypeClass = String.class, example = "Bearer JWT (header.payload.signature)" )
 	@PutMapping("/{usuarioId}")
-	public ResponseEntity<UsuarioUpdateOutput> atualizar(@PathVariable String usuarioId, @RequestBody UsuarioUpdateInput input) {
+	public ResponseEntity<UsuarioOutput> atualizar(@PathVariable String usuarioId, @Valid @RequestBody UsuarioInput input) {
 		Usuario usuarioExistente = repository.findByNomeUsuario(usuarioId);
 		
 		String username = getUsernameFromToken();
@@ -87,7 +85,7 @@ public class UsuarioController {
 		input.setId(usuarioExistente.getId());
 		input.setNomeUsuario(usuarioExistente.getNomeUsuario());
 		
-		UsuarioUpdateOutput output = service.alterar(input);
+		UsuarioOutput output = service.alterar(input);
 		
 		return ResponseEntity.ok(output);
 	}

@@ -2,14 +2,25 @@ package br.com.boavista.challenge.api.model;
 
 import java.util.Date;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class UsuarioCreateOutput {
+import br.com.boavista.challenge.api.validation.ValidationGroups;
+
+public class UsuarioInput {
 
 	private Long id;
 	
+	@NotBlank
 	private String nomeUsuario;
 	
+	@NotBlank
 	private String nome;
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
@@ -17,15 +28,21 @@ public class UsuarioCreateOutput {
 	
 	private Long telefone;
 	
+	@NotNull
 	private String senha;
 	
+	@Email
 	private String email;
 	
+	@Valid
+	@NotNull
+	@ConvertGroup(from = Default.class, to = ValidationGroups.Endereco.class)
 	private EnderecoModel endereco;
 	
+	@Valid
+	@NotNull
+	@ConvertGroup(from = Default.class, to = ValidationGroups.Perfil.class)
 	private PerfilModel perfil;
-	
-	private JwtModel token;
 
 	public Long getId() {
 		return id;
@@ -90,20 +107,12 @@ public class UsuarioCreateOutput {
 	public void setEndereco(EnderecoModel endereco) {
 		this.endereco = endereco;
 	}
-
+	
 	public PerfilModel getPerfil() {
 		return perfil;
 	}
 
 	public void setPerfil(PerfilModel perfil) {
 		this.perfil = perfil;
-	}
-
-	public JwtModel getToken() {
-		return token;
-	}
-
-	public void setToken(JwtModel token) {
-		this.token = token;
 	}
 }

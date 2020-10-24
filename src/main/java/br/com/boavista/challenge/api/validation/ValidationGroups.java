@@ -5,4 +5,8 @@ public interface ValidationGroups {
 	public interface Endereco {
 		
 	}
+	
+	public interface Perfil {
+		
+	}
 }

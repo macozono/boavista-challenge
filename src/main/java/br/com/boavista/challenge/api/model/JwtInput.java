@@ -2,36 +2,34 @@ package br.com.boavista.challenge.api.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 public class JwtInput implements Serializable {
 
-	private static final long serialVersionUID = 5926468583005150707L;
-
-	private String username;
-	private String password;
-
+	private static final long serialVersionUID = -5213178464714978821L;
+	
+	@NotBlank
+	private String usuario;
+	@NotBlank
+	private String senha;
+	
 	public JwtInput() {
 		
 	}
 
-	public JwtInput(String username, String password) {
-		this.setUsername(username);
-		this.setPassword(password);
+	public String getUsuario() {
+		return usuario;
 	}
 
-	public String getUsername() {
-		return this.username;
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public String getSenha() {
+		return senha;
 	}
 
-	public String getPassword() {
-		return this.password;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
 }

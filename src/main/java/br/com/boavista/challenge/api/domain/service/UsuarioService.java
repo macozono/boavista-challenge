@@ -7,16 +7,13 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import br.com.boavista.challenge.api.domain.exception.NegocioBaseException;
-import br.com.boavista.challenge.api.domain.model.Perfil;
+import br.com.boavista.challenge.api.domain.exception.UsuarioNaoAutorizadoException;
 import br.com.boavista.challenge.api.domain.model.TipoPerfil;
 import br.com.boavista.challenge.api.domain.model.Usuario;
-import br.com.boavista.challenge.api.domain.model.repository.PerfilRepository;
 import br.com.boavista.challenge.api.domain.model.repository.UsuarioRepository;
 import br.com.boavista.challenge.api.model.JwtModel;
-import br.com.boavista.challenge.api.model.UsuarioCreateInput;
-import br.com.boavista.challenge.api.model.UsuarioCreateOutput;
-import br.com.boavista.challenge.api.model.UsuarioUpdateInput;
-import br.com.boavista.challenge.api.model.UsuarioUpdateOutput;
+import br.com.boavista.challenge.api.model.UsuarioInput;
+import br.com.boavista.challenge.api.model.UsuarioOutput;
 import br.com.boavista.challenge.api.util.JwtTokenUtil;
 import br.com.boavista.challenge.api.util.ModelMapperUtil;
 
@@ -25,9 +22,6 @@ public class UsuarioService {
 
 	@Autowired
 	private UsuarioRepository repository;
-	
-	@Autowired
-	private PerfilRepository perfilRepository;
 	
 	@Autowired
 	private ModelMapperUtil mapper;
@@ -39,13 +33,13 @@ public class UsuarioService {
 		Usuario usuario = repository.findByNomeUsuario(username);
 		
 		if (usuario.getPerfil().getTipoPerfil() != TipoPerfil.ADMIN) {
-			throw new RuntimeException("");
+			throw new UsuarioNaoAutorizadoException("Usuário sem perfil de acesso.");
 		}
 		
 		return repository.findAll();
 	}
 	
-	public UsuarioCreateOutput criar(UsuarioCreateInput input) {
+	public UsuarioOutput criar(UsuarioInput input) {
 		Usuario usuarioExistente = repository.findByNomeUsuario(input.getNomeUsuario());
 		
 		if (usuarioExistente != null) {
@@ -57,21 +51,18 @@ public class UsuarioService {
 		String passwdHash = BCrypt.hashpw(input.getSenha(), BCrypt.gensalt());
 		usuario.setSenha(passwdHash);
 		
-		Perfil perfil = perfilRepository.findByTipoPerfil(input.getPerfil());
-		usuario.setPerfil(perfil);
-		
 		usuario = repository.save(usuario);
 		
-		UsuarioCreateOutput output = mapper.toModel(usuario, UsuarioCreateOutput.class);
+		UsuarioOutput output = mapper.toModel(usuario, UsuarioOutput.class);
 		String token = jwtTokenUtil.generateToken(usuario.getNomeUsuario());
 		
 		JwtModel jwt = new JwtModel(token);
-		output.setToken(jwt);
+		output.setJwt(jwt);
 		
 		return output;
 	}
 	
-	public UsuarioUpdateOutput alterar(UsuarioUpdateInput input) {
+	public UsuarioOutput alterar(UsuarioInput input) {
 		Usuario usuarioExistente = repository.findById(input.getId()).get();
 		Usuario usuario = mapper.toEntity(input, Usuario.class);
 		
@@ -82,11 +73,11 @@ public class UsuarioService {
 		
 		usuario = repository.save(usuario);
 		
-		UsuarioUpdateOutput output = mapper.toModel(usuario, UsuarioUpdateOutput.class);
+		UsuarioOutput output = mapper.toModel(usuario, UsuarioOutput.class);
 		String token = jwtTokenUtil.generateToken(usuario.getNomeUsuario());
 		
 		JwtModel jwt = new JwtModel(token);
-		output.setToken(jwt);
+		output.setJwt(jwt);
 		
 		return output;
 	}
