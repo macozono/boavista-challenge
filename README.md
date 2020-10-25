@@ -61,6 +61,14 @@ docker-compose up -d --build
 
 Parâmetro --build necessário apenas na primeira execução para que sejam criadas as imagens dos serviços declarados no arquivo docker-compose.yaml.
 
+**Importante!!** Antes de executar o compose é necessário gerar o JAR da aplicação para que este seja copiado ao container e depois executado. Portanto, executar o seguinte comando para geração do JAR:
+
+```
+mvnw -Pdocker package
+```
+
+**Obs:** Parâmetro -P indica o profile docker que foi configurado no POM para execução de plugin específico para geração do JAR para uso no container.
+
 ## URLs para os endpoints disponíveis na nuvem para testes
 
 Foram disponibilizados os seguintes endpoints na cloud do Google:
