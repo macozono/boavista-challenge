@@ -22,6 +22,7 @@ import br.com.boavista.challenge.api.domain.exception.EntidadeNaoEncontradaExcep
 import br.com.boavista.challenge.api.domain.exception.NegocioBaseException;
 import br.com.boavista.challenge.api.domain.exception.UsuarioNaoAutorizadoException;
 import br.com.boavista.challenge.api.domain.exception.UsuarioNaoConfereException;
+import io.jsonwebtoken.SignatureException;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -67,6 +68,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	@ExceptionHandler(UsuarioNaoAutorizadoException.class)
 	public ResponseEntity<Object> handleUsuarioNaoAutorizado(UsuarioNaoAutorizadoException ex, WebRequest request) {
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		Problema problema = new Problema();
+		
+		problema.setStatus(status.value());
+		problema.setTitulo(ex.getMessage());
+		problema.setDataHora(OffsetDateTime.now());
+		
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
+	
+	@ExceptionHandler(SignatureException.class)
+	public ResponseEntity<Object> handleAssinaturaJwtInvalida(SignatureException ex, WebRequest request) {
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		Problema problema = new Problema();
 		

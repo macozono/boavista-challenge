@@ -116,9 +116,14 @@ public class UsuarioController {
 	
 	private String getUsernameFromToken() {
 		String authHeader = request.getHeader("Authorization");
-		final String token = authHeader.substring(7);
 		
-		String username = jwtTokenUtil.getUsernameFromToken(token);
-		return username;
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			final String token = authHeader.substring(7);
+			
+			String username = jwtTokenUtil.getUsernameFromToken(token);
+			return username;			
+		}
+
+		return "";
 	}
 }

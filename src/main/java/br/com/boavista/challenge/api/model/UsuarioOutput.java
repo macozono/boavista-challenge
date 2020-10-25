@@ -3,7 +3,6 @@ package br.com.boavista.challenge.api.model;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UsuarioOutput {
 

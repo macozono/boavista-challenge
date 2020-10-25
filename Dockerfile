@@ -11,11 +11,4 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 
 WORKDIR /var/www
 
-#RUN chown -R www-data:www-data /var/www
-
-#RUN usermod -u 1000 www-data
-#USER www-data
-
 EXPOSE 8080
-
-#ENTRYPOINT ["php-fpm"]
